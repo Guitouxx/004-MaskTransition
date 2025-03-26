@@ -1,13 +1,13 @@
 <script lang="ts">
 	import 'css/main.css';
 	import { each } from 'lodash-es';
-	import { damp } from 'maath/easing';
 	import { onMount } from 'svelte';
 	import { Pane, Slider, ThemeUtils } from 'svelte-tweakpane-ui';
 	import {
 		Clock,
 		Color,
 		GLSL3,
+		MathUtils,
 		Mesh,
 		NearestFilter,
 		PerspectiveCamera,
@@ -109,7 +109,12 @@
 		renderer.render(scene, camera);
 
 		const delta = clock.getDelta();
-		damp(material.uniforms.uProgress, 'value', progress, 0.2, delta);
+		material.uniforms.uProgress.value = MathUtils.damp(
+			material.uniforms.uProgress.value,
+			progress,
+			5,
+			delta
+		);
 	};
 
 	const resize = () => {
